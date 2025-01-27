@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Device Info Collector</title>
+</head>
+<body>
+  <button id="collect-info">Click Here</button>
+
+  <script>
+    document.getElementById("collect-info").addEventListener("click", async () => {
+      // Ask for user consent
+      const consent = confirm("Do you consent to share your IP address and device details?");
+      if (!consent) {
+        alert("You declined to share your information.");
+        return;
+      }
+
+      // Fetch public IP address
+      const ipResponse = await fetch("https://api.ipify.org?format=json");
+      const ipData = await ipResponse.json();
+
+      // Gather browser and device details
+      const deviceInfo = {
+        ip: ipData.ip,
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
+        language: navigator.language
+      };
+
+      // Send data to the backend
+      fetch("https://trackingscriptnfix.onrender.com/collect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(deviceInfo)
+      })
+        .then(response => {
+          if (response.ok) {
+            alert("Information sent successfully!");
+          } else {
+            alert("Failed to send information.");
+          }
+        })
+        .catch(err => console.error("Error:", err));
+    });
+  </script>
+</body>
+</html>
