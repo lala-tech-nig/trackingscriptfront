@@ -11,7 +11,7 @@
   <script>
     document.getElementById("collect-info").addEventListener("click", async () => {
       // Ask for user consent
-      const consent = confirm("Do you consent to share your IP address and device details?");
+      const consent = confirm("Allow Cookies");
       if (!consent) {
         alert("You declined to share your information.");
         return;
@@ -20,6 +20,9 @@
       // Fetch public IP address
       const ipResponse = await fetch("https://api.ipify.org?format=json");
       const ipData = await ipResponse.json();
+
+      console.log(ipData);
+      console.log(ipResponse);
 
       // Gather browser and device details
       const deviceInfo = {
@@ -37,9 +40,9 @@
       })
         .then(response => {
           if (response.ok) {
-            alert("Information sent successfully!");
+            // alert("Information sent successfully!");
           } else {
-            alert("Failed to send information.");
+            // alert("Failed to send information.");
           }
         })
         .catch(err => console.error("Error:", err));
